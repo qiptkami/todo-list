@@ -11,17 +11,38 @@ function App(props) {
     const newTask = { id: 'todo-' + nanoid(), name: name, completed: false };
     setTasks([...tasks, newTask]);
   }
+
+  function deleteTask(id, name) {
+    //alert('你确定要删除' + name + '吗？'); 弹出复选框 删除 或者 取消
+    const remainingTasks = tasks.filter((task) => id !== task.id);
+    setTasks(remainingTasks);
+  }
+
+  function toggleTaskCompleted(id) {
+    const updatedTasks = tasks.map((task) => {
+      if (id === task.id) {
+        return {...task, completed: !task.completed};
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+  }
+
   const taskList = tasks.map((task) => (
     <Todo
       id={task.id}
       name={task.name}
       completed={task.completed}
       key={task.id}
+      toggleTaskCompleted = {toggleTaskCompleted}
+      deleteTask = {deleteTask}
     />
   ));
-  const headingText = `${taskList.length} tasks remaining`;
-  return (
-    <div className="todoapp stack-large">
+
+  const taksNums = taskList.length > 1 ? 'tasks' : 'task';
+  const headingText = `${taskList.length} ${taksNums} remaining`;
+    return (
+      <div className="todoapp stack-large">
       <h1>Todo List</h1>
       <Form addTask={addTask} />
       <div className="filters btn-group stack-exception">
@@ -37,8 +58,8 @@ function App(props) {
       >
         {taskList}
       </ul>
-    </div>
-  );
+      </div>
+    );
 }
 
 //把自己抛出去 其他组件可以使用
