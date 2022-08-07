@@ -6,6 +6,7 @@ import FilterButton from './components/FilterButton';
 
 function usePrevious(value) {
   const ref = useRef();
+
   useEffect(() => {
     ref.current = value;
   });
@@ -39,9 +40,10 @@ function App(props) {
   }
 
   function deleteTask(id, name) {
-    //alert('你确定要删除' + name + '吗？'); 弹出复选框 删除 或者 取消
-    const remainingTasks = tasks.filter((task) => id !== task.id);
-    setTasks(remainingTasks);
+    if (window.confirm('你确定要删除' + name + '吗？')) {
+      const remainingTasks = tasks.filter((task) => id !== task.id);
+      setTasks(remainingTasks);
+    }
   }
 
   function toggleTaskCompleted(id) {
